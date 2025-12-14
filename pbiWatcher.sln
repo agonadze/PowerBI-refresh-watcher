@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pbiWatcher", "pbiWatcher.csproj", "{34905E7F-E179-4585-B3DE-B6D5A0ED34AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pbiHelper", "..\pbiHelper\pbiHelper.csproj", "{4B7CDBF5-6472-4945-8B2E-4FA207ECB716}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34905E7F-E179-4585-B3DE-B6D5A0ED34AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34905E7F-E179-4585-B3DE-B6D5A0ED34AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34905E7F-E179-4585-B3DE-B6D5A0ED34AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34905E7F-E179-4585-B3DE-B6D5A0ED34AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B7CDBF5-6472-4945-8B2E-4FA207ECB716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B7CDBF5-6472-4945-8B2E-4FA207ECB716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B7CDBF5-6472-4945-8B2E-4FA207ECB716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B7CDBF5-6472-4945-8B2E-4FA207ECB716}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2F8C656-AA6C-4970-90E4-20FAFEAB59A3}
+	EndGlobalSection
+EndGlobal

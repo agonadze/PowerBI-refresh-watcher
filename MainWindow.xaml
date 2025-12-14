@@ -1,0 +1,142 @@
+﻿<Window x:Class="pbiWatcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:pbiWatcher"
+        mc:Ignorable="d"
+        Title="PowerBI refresh watcher" Height="450" Width="1070">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Click="NewMenuItem_Click"/>
+                <MenuItem Header="_Open..." Click="OpenMenuItem_Click"/>
+                <MenuItem Header="_Save" Click="SaveMenuItem_Click"/>
+                <MenuItem Header="Save _As..." Click="SaveAsMenuItem_Click"/>
+                <MenuItem Header="_Close" Click="CloseMenuItem_Click" />
+                <Separator/>
+                <MenuItem Header="E_xit" Click="ExitMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="AboutMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10" HorizontalAlignment="Stretch" >
+                <Grid Margin="10" HorizontalAlignment="Stretch" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="200" Width="1*"/>
+                        <ColumnDefinition MinWidth="200" Width="1*"/>
+                        <ColumnDefinition MinWidth="200" Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="bStartStop" Width="150" Content="Start Monitoring" Click="bStartStop_Click" Margin="0,0,10,0"/>
+                    <Button Grid.Column="1" x:Name="bEdit" Width="100" Content="Edit" Click="bEdit_Click" HorizontalAlignment="Center" Margin="20,0,10,0"/>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="Timezone:" VerticalAlignment="Center" Margin="20,0,10,0"/>
+                        <RadioButton x:Name="rbTZlocal" Content="Local" GroupName="Timezone" IsChecked="True" Checked="rbTZlocal_Checked" Margin="0,0,10,0"/>
+                        <RadioButton x:Name="rbTZUtc" Content="UTC" GroupName="Timezone" Checked="rbTZUtc_Checked"  Margin="0,0,10,0"/>
+                    </StackPanel>
+                </Grid>
+                
+                <TextBlock Text="{Binding StatusMessage}" Margin="20,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <DataGrid x:Name="dataGrid" Grid.Row="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      SelectionUnit="FullRow" 
+                      SelectionMode="Single"
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="False"   
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="False"
+                      CanUserReorderColumns="False"
+                      SelectedItem="{Binding DObject, Mode=OneTime}"                      
+                      GridLinesVisibility="Horizontal"
+                      ScrollViewer.CanContentScroll="True"
+                      Visibility ="Visible"
+                      ContextMenuOpening="dataGrid_ContextMenuOpening"
+                      MouseDoubleClick="dataGrid_MouseDoubleClick"
+             >
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="mnuShowHist" Header="Show Refresh/Run History" Click="ShowHistory_Click" />
+                        <MenuItem x:Name="mnuStartRefresh" Header="Refresh" Click="Refresh_Click" />
+                        <MenuItem x:Name="mnuCancelRefresh" Header="Cancel" Click="Cancel_Click" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="SizeToCells" IsReadOnly="True" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter>
+                                                <ContentPresenter.Content>
+                                                    <Image Width="14" Height="14" Source="{Binding imgUri}" />
+                                                </ContentPresenter.Content>
+                                            </ContentPresenter>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding DataObject}" Header="Object Name" Width="300" IsReadOnly="True" CanUserResize="True" />
+                    <DataGridTemplateColumn Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter>
+                                                <ContentPresenter.Content>
+                                                    <Image Width="14" Height="14" Source="{Binding imgPremUri}" />
+                                                </ContentPresenter.Content>
+                                            </ContentPresenter>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Workspace}" Header="Workspace" Width="300" IsReadOnly="True" CanUserResize="True" />
+                    <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="100" 
+                                             IsReadOnly="True" CanUserResize="False">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="Success">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Background" Value="#FF24C224" />
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Completed">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Background" Value="#FF24C224" />
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="InProgress">
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Failed">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Background" Value="#FFE05038" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RefreshStart}" Header="Refresh Start" Width="150" IsReadOnly="True" CanUserResize="True" />
+                    <DataGridTextColumn Binding="{Binding RefreshEnd}" Header="Refresh End" Width="150" IsReadOnly="True" CanUserResize="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            
+        </Grid>
+    </DockPanel>
+    
+</Window>

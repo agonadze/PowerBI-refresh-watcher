@@ -1,0 +1,114 @@
+﻿<Window x:Class="pbiWatcher.wPbiObjects"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:pbiWatcher"
+        mc:Ignorable="d"
+        Title="List of Power BI Objects to watch" Height="600" Width="850" WindowStyle="ThreeDBorderWindow" ResizeMode="NoResize" WindowState="Normal" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="DGHeaderStyle" TargetType="{x:Type DataGrid}">
+            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource DGCHeaderStyle}"/>
+        </Style>
+        <Style x:Key="DGCHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontFamily" Value="Calibri" />
+        </Style>
+    </Window.Resources>
+    <DockPanel Margin="20" >
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Select Power BI Objects" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Selected Objects" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <DockPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" Background="AliceBlue">
+                <TreeView x:Name="tvWorkspaces" 
+                          VerticalAlignment="Stretch" DockPanel.Dock="Top" Height="Auto" Width="Auto" 
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                          MouseDoubleClick="tvWorkspaces_MouseDoubleClick">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="FontSize" Value="12" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView> 
+            </DockPanel>
+            <DataGrid x:Name="DG" Grid.Row="1" Grid.Column="2" AutoGenerateColumns="False" Margin="10,0,10,0"
+                      HeadersVisibility="None"
+                      SelectionUnit="FullRow" Style="{DynamicResource DGHeaderStyle}" 
+                      SelectionMode="Single"
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="False"   
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="False"
+                      CanUserReorderColumns="False"                      
+                      SelectedItem="{Binding DObject, Mode=TwoWay}"
+                      GridLinesVisibility="Horizontal"
+                      ScrollViewer.CanContentScroll="True"
+                      HorizontalGridLinesBrush="LightGray"
+                      Height="Auto" VerticalGridLinesBrush="White" Background="White"
+             >
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Type" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter>
+                                                <ContentPresenter.Content>
+                                                    <Image Width="14" Height="14" Source="{Binding imgUri}" />
+                                                </ContentPresenter.Content>
+                                            </ContentPresenter>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding DataObject}" IsReadOnly="True" Header="Object Name" Width="290" CanUserResize="True" />
+                    <DataGridTemplateColumn Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter>
+                                                <ContentPresenter.Content>
+                                                    <Image Width="14" Height="14" Source="{Binding imgPremUri}" />
+                                                </ContentPresenter.Content>
+                                            </ContentPresenter>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Workspace}" IsReadOnly="True" Header="Workspace" Width="300" CanUserResize="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                <Button x:Name="bUp" Grid.Row="1" Grid.Column="1" Width="75" Height="30" Content="Move up" Click="bUp_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="bDown" Grid.Row="1" Grid.Column="1" Width="75" Height="30" Content="Move down" Click="bDown_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,10"/>
+                <Button x:Name="bAdd" Grid.Column="1" Grid.Row="1" Width="75" Height="30" Content="Add" Click="bAdd_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10"/>
+                <Button x:Name="bRemove" Grid.Column="1" Grid.Row="1" Width="75" Height="30" Content="Remove" Click="bRemove_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10"/>
+                <Button x:Name="bRemoveAll" Grid.Column="1" Grid.Row="1" Width="75" Height="30" Content="Remove All" Click="bRemoveAll_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10"/>
+             </StackPanel>
+            <Button x:Name="bCancel" Grid.Row="2" Grid.Column="0" Width="75" Height="30" Content="Cancel" Click="bCancel_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button x:Name="bApply" Grid.Row="2" Grid.Column="2" Width="75" Height="30" Content="Apply" Click="bApply_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+
+        </Grid>
+    </DockPanel>
+</Window>
